@@ -31,33 +31,59 @@ namespace Interfaces
 
     public interface IMoveStrategy
     {
-        Position Move(Position currentPosition);
+        Position Move(Position enemyPosition, Position playerPosition);
     }
 
     public class AggressiveMoveStrategy : IMoveStrategy
     {
-        public Position Move(Position currentPosition)
+        public Position Move(Position enemyPosition, Position playerPosition)
         {
-            return new Position(currentPosition.x + 1, currentPosition.y);
+            int x = playerPosition.x - enemyPosition.x;
+            int y = playerPosition.y - enemyPosition.y;
+
+            int stepX = x == 0 ? 0 : x / Math.Abs(x);
+            int stepY = y == 0 ? 0 : y / Math.Abs(y);
+
+            return new Position(enemyPosition.x + stepX, enemyPosition.y + stepY);
         }
     }
 
     public class PassiveMoveStrategy : IMoveStrategy
     {
-        public Position Move(Position currentPosition)
+        public Position Move(Position enemyPosition, Position playerPosition)
         {
-            return new Position(currentPosition.x - 1, currentPosition.y);
+            int newX = enemyPosition.x;
+            int newY = enemyPosition.y;
+
+            if (enemyPosition.x < playerPosition.x)
+            {
+                newX++;
+            }
+                
+            else if (enemyPosition.x > playerPosition.x)
+            {
+                newX--;
+            }
+
+            if (newX == playerPosition.x)
+            {
+                if (enemyPosition.y < playerPosition.y) newY++;
+                else if (enemyPosition.y > playerPosition.y) newY--;
+            }
+
+            return new Position(newX, newY);
         }
     }
+
     public class RandomMoveStrategy : IMoveStrategy
     {
         private static Random _random = new Random();
 
-        public Position Move(Position currentPosition)
+        public Position Move(Position enemyPosition, Position playerPosition)
         {
             int x = _random.Next(-1, 2);
             int y = _random.Next(-1, 2);
-            return new Position(currentPosition.x + x, currentPosition.y + y);
+            return new Position(enemyPosition.x + x, enemyPosition.y + y);
         }
     }
 
@@ -74,9 +100,9 @@ namespace Interfaces
             _moveStrategy = moveStrategy;
         }
 
-        public void Move()
+        public void Move(Position playerPosition)
         {
-            Position = _moveStrategy.Move(Position);
+            Position = _moveStrategy.Move(Position, playerPosition);
         }
     }
 
@@ -121,7 +147,7 @@ namespace Interfaces
 
                 if (key == ConsoleKey.M)
                 {
-                    enemy.Move();
+                    enemy.Move(player.Position);
                 }
                 else if (key == ConsoleKey.I)
                 {
