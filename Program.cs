@@ -49,6 +49,17 @@ namespace Interfaces
             return new Position(currentPosition.x - 1, currentPosition.y);
         }
     }
+    public class RandomMoveStrategy : IMoveStrategy
+    {
+        private static Random _random = new Random();
+
+        public Position Move(Position currentPosition)
+        {
+            int x = _random.Next(-1, 2);
+            int y = _random.Next(-1, 2);
+            return new Position(currentPosition.x + x, currentPosition.y + y);
+        }
+    }
 
     public class Enemy
     {
@@ -79,6 +90,7 @@ namespace Interfaces
 
             IMoveStrategy aggressive = new AggressiveMoveStrategy();
             IMoveStrategy passive = new PassiveMoveStrategy();
+            IMoveStrategy random = new RandomMoveStrategy();
 
             Enemy enemy = new Enemy(new Position(5, 5), ConsoleColor.Red, aggressive);
 
@@ -108,11 +120,21 @@ namespace Interfaces
                 ConsoleKey key = Console.ReadKey(true).Key;
 
                 if (key == ConsoleKey.M)
+                {
                     enemy.Move();
+                }
                 else if (key == ConsoleKey.I)
+                {
                     enemy._moveStrategy = aggressive;
+                }
                 else if (key == ConsoleKey.O)
+                {
                     enemy._moveStrategy = passive;
+                }
+                else if (key == ConsoleKey.P)
+                {
+                    enemy._moveStrategy = random;
+                }
             }
         }
     }
