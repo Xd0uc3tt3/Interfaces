@@ -28,6 +28,21 @@ namespace Interfaces
             Color = color;
         }
     }
+
+    public class Enemy
+    {
+        public Position Position;
+        public ConsoleColor Color;
+
+        public Enemy(Position position, ConsoleColor color)
+        {
+            Position = position;
+            Color = color;
+        }
+
+    }
+
+
     internal class Program
     {
         static void Main(string[] args)
