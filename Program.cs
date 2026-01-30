@@ -130,7 +130,6 @@ namespace Interfaces
                 Console.WriteLine("(I) Aggressive");
                 Console.WriteLine("(O) Passive");
                 Console.WriteLine("(P) Random");
-                Console.WriteLine(enemy._moveStrategy.GetType().Name);
                 Console.WriteLine();
 
                 Console.ForegroundColor = player.Color;
